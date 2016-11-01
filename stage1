@@ -1,7 +1,7 @@
 const request = require('request');
 
 const authToken = f13654f60f6367dd201d065502a9c8ea;
-const githubUrl = https://github.com/jonahze/Jonah-Epstein---Code2040
+const githubUrl = https://github.com/jonahze/Jonah-Epstein---Code2040;
 
 
 /**
