@@ -1,3 +1,9 @@
+/* Jonah Zamora Epstein
+ * File: Registration.java
+ * ----------------------
+ * This file is a class that connects to an endpoint registration API and
+ * POSTs a JSON dictionary containing a token value and github value.
+ */
 package code2040APi;
 import java.io.BufferedReader;
 import java.io.IOException;
