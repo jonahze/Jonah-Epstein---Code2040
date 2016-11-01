@@ -10,7 +10,7 @@ const githubUrl = https://github.com/jonahze/Jonah-Epstein---Code2040;
  */
 function post() {
   request.post({
-    uri: 'http://challenge.code2040.org/api/reverse/validate',
+    uri: 'http://challenge.code2040.org/api/register',
     method: 'POST',
     json: { token: authToken, github: githubUrl } },
     (err, response, body) => {
