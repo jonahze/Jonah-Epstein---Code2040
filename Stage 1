@@ -14,7 +14,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class registration {	
-
 	public static void main(String args[]) {	
 		//initializes the os stream and the HTTP connection
 		HttpURLConnection conn;
