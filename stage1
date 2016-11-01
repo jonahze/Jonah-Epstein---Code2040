@@ -1,15 +1,5 @@
-
-
 from json import dumps, loads
-from urllib2 import urlopen, Request
 
-
-info = {'token':'f13654f60f6367dd201d065502a9c8ea', 'github':'https://github.com/jonahze/Jonah-Epstein---Code2040/new/master'}
-
-
-token = dumps(info)
-
-
-req = Request('http://challenge.code2040.org/api/register', token)
-
-print req
+POST /test/demo_form.asp HTTP/1.1
+Host: http://challenge.code2040.org/api/register
+token=f13654f60f6367dd201d065502a9c8ea&github=https://github.com/jonahze/Jonah-Epstein---Code2040
