@@ -1,0 +1,83 @@
+/* Jonah Zamora Epstein
+ * File: Prefix.java
+ * ----------------------
+ * This file is a class that connects to an API and POSTs a token and in return gets a json
+ * dictionary with a prefix and an array of strings. It then iterates over the array and finds
+ * every string which doesnt start with that prefix, which it then returns to the API
+ */
+package code2040APi;
+import java.net.*;
+import java.io.*;
+import org.json.*;
+
+public class Prefix {
+	public static void main(String args[]) {
+
+		BufferedReader br;
+		JSONObject post;
+		JSONObject postReturn;
+		JSONObject json;
+		String token = "f13654f60f6367dd201d065502a9c8ea";
+
+		try {
+			//same as in Haystack or step3
+			post = new JSONObject();
+			post.put("token", token);
+			br = postGetBr(post.toString(), "http://challenge.code2040.org/api/prefix");
+			json = new JSONObject(br.readLine());
+			br.close();
+
+			//initializes the array and stores the prefix, along with creating a new array
+			JSONArray array = json.getJSONArray("array");
+			JSONArray nArray = new JSONArray();
+			String prefix = json.getString("prefix");
+
+			//iterates over the length of the array looking for the prefix, then places that 
+			//string in the new array
+			for(int i = 0; i < array.length(); i++) {
+				if(!array.getString(i).startsWith(prefix)) {
+					nArray.put(array.getString(i));
+				}
+			}
+
+			//same as in Haystack or step3
+			postReturn = new JSONObject();
+			postReturn.put("token", token);
+			postReturn.put("array", nArray);
+			br = postGetBr(postReturn.toString(), "http://challenge.code2040.org/api/prefix/validate");
+			System.out.println(br.readLine());
+			br.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * Helper function - Takes in a string containing what you desire to post along with 
+	 * the url you wish to post it to. It then POSTs a JSON dictionary to the URL and then 
+	 * it returns a buffered reader with the input stream from the url.
+	 */
+	public static BufferedReader postGetBr(String post, String url) throws Exception {
+		//initializes variables
+		HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+		OutputStream os;
+		
+		try {
+			//set output and request type
+			conn.setDoOutput(true);
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Content-Type", "application/json");
+
+			//sets the os stream to the output stream connected to the URL
+			os = conn.getOutputStream();
+			os.write(post.getBytes());
+			os.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	}
+
+}
