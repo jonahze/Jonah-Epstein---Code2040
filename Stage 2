@@ -1,3 +1,10 @@
+/* Jonah Zamora Epstein
+ * File: Reverse.java
+ * ----------------------
+ * This file is a class that connects to an endpoint API which returns a string. 
+ * This class then takes the string and reverses it, and then it POSTs the reversed
+ * string to a new URL
+ */
 package code2040APi;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,16 +14,18 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class registration {	
-
+public class Reverse {
 	public static void main(String args[]) {	
-		//initializes the os stream and the HTTP connection
+		//initializes the os stream and the HTTP connection along with other instances 
 		HttpURLConnection conn;
+		HttpURLConnection connVal;
 		OutputStream os;
+		OutputStream osVal;
 		BufferedReader br;
+		BufferedReader brVal;
 		
 		//sets the input string to JSON dictionary containing the token value and github value
-		String input = "{\"token\":\"f13654f60f6367dd201d065502a9c8ea\",\"github\":\"https://github.com/jonahze/Jonah-Epstein---Code2040\"}";
+		String token = "{\"token\":\"f13654f60f6367dd201d065502a9c8ea\"}";
 		try {
 			//sets the url to the registering url 
 			URL url = new URL("http://challenge.code2040.org/api/register");
@@ -33,7 +42,7 @@ public class registration {
 			os = conn.getOutputStream();
 			
 			//writes the JSON dictionary to the output stream
-			os.write(input.getBytes());
+			os.write(token.getBytes());
 			
 			//flushes the output stream
 			os.flush();
@@ -42,8 +51,31 @@ public class registration {
 			//initializes string to read output from server
 			String output;
 			while((output = br.readLine()) != null) {
-				System.out.println(output);
-			}
+				//reverse the given output string
+				String reversed = new StringBuffer(output).reverse().toString();
+				
+				//sets the new JSON string to the validating dictionary
+				String validate = "{\"token\":\"f13654f60f6367dd201d065502a9c8ea\",\"string\":\"" + reversed + "\"}";
+				
+				//sets the new URL to the validating URL
+				URL validateURL = new URL("http://challenge.code2040.org/api/reverse/validate");
+				connVal = (HttpURLConnection) validateURL.openConnection();
+				connVal.setDoOutput(true);
+				connVal.setRequestMethod("POST");
+				connVal.setRequestProperty("Content-Type", "application/json");
+
+				//here on is the same as above
+				osVal = connVal.getOutputStream();
+				osVal.write(validate.getBytes());
+				osVal.flush();
+				brVal = new BufferedReader(new InputStreamReader((connVal.getInputStream())));
+
+				String new_output;
+				while((new_output = brVal.readLine()) != null) {
+					System.out.println(new_output);
+				}
+
+				connVal.disconnect();			}
 			conn.disconnect();
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
