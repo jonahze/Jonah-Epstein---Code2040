@@ -1,0 +1,83 @@
+/* Jonah Zamora Epstein
+ * File: Haystack.java
+ * ----------------------
+ * This file is a class that connects to an API which takes in a dictionary containing a token.
+ * It gets a json containing a string and an array of string. It then iterates over the the 
+ * array of strings to find the index of the the particular string it gave. Then it POSTs the index.
+ */
+package code2040APi;
+import java.net.*;
+import java.io.*;
+import org.json.*;
+
+public class Haystack {
+	public static void main(String args[]) throws Exception {
+		//initializes main variables
+		BufferedReader br;
+		JSONObject post;
+		JSONObject json;
+		String token = "f13654f60f6367dd201d065502a9c8ea";
+
+		try {
+			//creates the JSONObject we want to POST to the url.
+			post = new JSONObject();
+			post.put("token", token);
+
+			//utilizes the helper function postGetBr - described below
+			br = postGetBr(post.toString(), "http://challenge.code2040.org/api/haystack");
+
+			//creates the JSON dictionary object that gets read in 
+			json = new JSONObject(br.readLine());
+			br.close();
+
+			//creates a JSONArray stacks with the haystack and stores the needle string
+			JSONArray stacks = json.getJSONArray("haystack");
+			String needle = json.getString("needle");
+
+			//finds the location
+			int n;
+			for (n = 0; n < stacks.length(); n++) {
+				if (stacks.getString(n).equals(needle)) {
+					break;
+				}
+			}
+			
+			//same as above, POST to a url
+			post = new JSONObject();
+			post.put("token", token);
+			post.put("needle", n);
+			br = postGetBr(post.toString(), "http://challenge.code2040.org/api/haystack/validate");
+			br.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/*
+	 * Helper function - Takes in a string containing what you desire to post along with 
+	 * the url you wish to post it to. It then POSTs a JSON dictionary to the URL and then 
+	 * it returns a buffered reader with the input stream from the url.
+	 */
+	public static BufferedReader postGetBr(String post, String url) throws Exception {
+		//initializes variables
+		HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
+		OutputStream os;
+		
+		try {
+			//set output and request type
+			conn.setDoOutput(true);
+			conn.setRequestMethod("POST");
+			conn.setRequestProperty("Content-Type", "application/json");
+
+			//sets the os stream to the output stream connected to the URL
+			os = conn.getOutputStream();
+			os.write(post.getBytes());
+			os.flush();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return new BufferedReader(new InputStreamReader(conn.getInputStream()));
+	}
+
+}
