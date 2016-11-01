@@ -1,7 +1,7 @@
 /* Jonah Zamora Epstein
  * File: Reverse.java
  * ----------------------
- * This file is a class that connects to an endpoint API which returns a string. 
+ * This file is a class that connects to an API which returns a string. 
  * This class then takes the string and reverses it, and then it POSTs the reversed
  * string to a new URL
  */
