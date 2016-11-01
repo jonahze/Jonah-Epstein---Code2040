@@ -1,5 +1,23 @@
-from json import dumps, loads
+const request = require('request');
 
-POST /test/demo_form.asp HTTP/1.1
-Host: http://challenge.code2040.org/api/register
-token=f13654f60f6367dd201d065502a9c8ea&github=https://github.com/jonahze/Jonah-Epstein---Code2040
+const authToken = f13654f60f6367dd201d065502a9c8ea;
+const githubUrl = https://github.com/jonahze/Jonah-Epstein---Code2040
+
+
+/**
+ * returnString() sends the reversed string
+ * back to Code2040's API
+ */
+function post() {
+  request.post({
+    uri: 'http://challenge.code2040.org/api/reverse/validate',
+    method: 'POST',
+    json: { token: authToken, github: githubUrl } },
+    (err, response, body) => {
+      if (!err && response.statusCode === 200) {
+        console.log(body);
+      }
+    });
+}
+
+post();
